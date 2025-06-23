@@ -7,3 +7,6 @@ urllib3
 pycryptodome
 httpx
 pycryptodome
+fastapi
+uvicorn
+pillow
