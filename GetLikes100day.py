@@ -930,7 +930,7 @@ tokens = {
 '3024340628':'rnbazh4hzyj2gx',
 }
 def get_jwt_token(uid, password):
-    url = f"https://app-py-amber.vercel.app/get?uid={uid}&password={password}"
+    url = f"https://projects-fox-x-get-jwt.vercel.app/get?uid={uid}&password={password}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
