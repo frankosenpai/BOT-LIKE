@@ -37,15 +37,6 @@ tokens_groups = {
 jwt_tokens = {}
 jwt_tokens_lock = threading.Lock() # قفل لحماية الوصول إلى jwt_tokens
 
-def require_api_key(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        key = request.args.get("key")  # من الرابط فقط
-        if key != API_KEY:
-            return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
-        return f(*args, **kwargs)
-    return decorated
-    
 def get_jwt_token(uid, password):
     url = f"https://projects-fox-x-get-jwt.vercel.app/get?uid={uid}&password={password}"
     try:
@@ -146,6 +137,9 @@ def send_friend_request_for_token(uid, token, target_id):
 @app.route('/sv<int:sv_number>/add_likes', methods=['GET'])
 def send_friend_requests(sv_number=None):
     target_id = request.args.get('uid')
+    key = request.args.get("key")
+ if key != API_KEY:
+            return jsonify({"error": "Unauthorized - Invalid API Key"}), 400
     if not target_id:
         return jsonify({"error": "target_id is required"}), 400
     try:
