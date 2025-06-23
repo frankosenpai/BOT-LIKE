@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from fastapi import FastAPI, Query, HTTPException, Response
 import requests
 import threading
 import time
@@ -7,9 +6,8 @@ import urllib3
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-app = Flask(__name__)
 
-app = FastAPI()
+app = Flask(__name__)
 API_KEY = "FranKo-7up" 
 
 tokens1 = {'3024354978': 'kck8cdpa5rvf3m', '3024368971': 'ut78r7d127bgsl', '3024345234': 'f252rz4eebkdof', '3024367478': 'q6u8t2tx94gig8', '3024342431': 'oiyjei53ajezog', '3024338544': 'rwpvhwlus49e1b', '3024328153': 'yy7kse2pgazrot', '3024354140': 'ecs2cc9jvl5db0', '3024368519': 'svwuzwrtncla0w', '3024337571': 'q1glhia9czdpel', '3024362951': 'xpbahne7hl3l17', '3024324283': 'sbx8xqh3l04xd5', '3024356713': '6o7kz6k5otann9', '3024342783': 'f9eujq5t7jo637', '3024333553': '5q0m5s6nfu5mm2', '3024329736': '7l9qoam3sy6sx9', '3024330976': 'b2j05jgzq36m3a', '3024329460': 'yw4q38zpdspctv', '3024357887': 'ye53z7s76v8ucy', '3024347631': '0ai29cowwu6lmr', '3024325456': '3qpprp5vd404ii', '3024341401': 'fzv7dni8i10gum', '3024347784': 'lni7fqil7pkctz', '3024350833': 'qy7ie4pto5fv6g', '3024356162': 'fxqfbz6mzo056s', '3024336993': 'dsyqahx6o2uvd8', '3024372083': 'c4ct0ng1ls834j', '3024357875': 'pig0a0giyvktij', '3024372014': 'exfwo13p31l6na', '3024351186': 'tiq2oxl9ll9ygc', '3024324790': 'k9xp3gdcnvuns8', '3024334468': 'w5vwu1tx0p1kyh', '3024324774': 'lxv9kgecy9hg9j', '3024371659': 'eclukgr7bduiot', '3024348044': 'go6982pf7kr75j', '3024337641': 'xynopote5j2xcf', '3024352396': '3w4r5z0hh4a760', '3024349679': 'svhrbfhx6fzcey', '3024355269': 'm6tvroehm38y2y', '3024328942': 'jw9pnbdw3mp8x9', '3024357290': '01yla1vsaye259', '3024363043': 'g33isgmlp150r1', '3024324384': '8eweshgg1asit3', '3024350638': 'fnwm7rtv5x219p', '3024325299': '4lkrni7r3srtmn', '3024361479': 'wl8pkb89r1epgz', '3024363613': 'w4zqc1uqshw03k', '3024358600': 'vi15qfs41clgse', '3024354618': 'zivkx97vaqiizo', '3024365711': 'xp5gbiibn5psb4', '3024342004': '1uv3mkv8yt3w6q', '3024336448': 'qizflqm6vuc9e2', '3024355291': 's5ykjy2zpa25x6', '3024334044': '12the1ya2mitp9', '3024373774': '1104ut9ejdxoyu', '3024370561': 'ayew1oz0azt01n', '3024371448': '4vdp62i8gr35uv', '3024350622': 'sc99xss30f85gj', '3024347509': 'qoq1ylb9zo6muc', '3024333786': '591h66u2w3hjo1', '3024349287': 'rbca9udvxvlrzu', '3024349676': 'vou2cc3kb595pm', '3024354425': 'fjhim9x9655yeb', '3024371811': 'bduitswv54i537', '3024367562': 'lkpjvixpe5sd6u', '3024349011': 'c19ve5iv7p6ec0', '3024330560': 'c793cbdz55i3b2', '3024364267': 'cf5mka24nokuvp', '3024361963': 'ld24wtyyffydvm', '3024333233': 'uncmlxdpjea1dk', '3024342669': 'y7a78elsmfdfbq', '3024374008': 'oz5hh480sn0w95', '3024369907': '9qq4baviset2k3', '3024323333': '43p9o4eyonb42d', '3024352162': 'ivl4uwp8cjicmt', '3024367744': '9og22rnsozmhav', '3024331401': 'y36ga1ss6b1xlz', '3024330544': '3q540whinjcy9k', '3024337430': '3k1fqegt6lajac', '3024325546': 'dz9dzdc3rylv1r', '3024363954': 'f377d3ctkfumcb', '3024351339': 'onee6aiepl2h2u', '3024355584': 'x6gme3gphe3cwk', '3024372048': 'o7psxtsj8pdm91', '3024368179': '3g6d3ef8ko3vs8', '3024339535': 'okctv2lmjp1h4y', '3024341307': 'z2rw3yk7ikqr0f', '3024353566': 'qcbdtrh7cbj007', '3024345648': 'neywrf5d0l20nf', '3024337117': 'n9agsmfsfhmijq', '3024335461': '5nxnunc5gqhber', '3024350979': '7u25we9duemr09', '3024334488': 'wftvtwfc5xdnwn', '3024365185': 'rnvh6imz6p1dp1', '3024360473': '6b4q230npt4z4m', '3024337014': 'buuoe0574yzwne', '3024373340': 's8emno39dnl4sh', '3024334503': 'i4h05smlgvvp0u', '3024342178': 'qaevtn1ql61ceq', '3024350197': 'w2ixr3tl9eaqov'}
@@ -38,6 +36,15 @@ tokens_groups = {
 jwt_tokens = {}
 jwt_tokens_lock = threading.Lock()  # قفل لحماية الوصول إلى jwt_tokens
 
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        key = request.args.get("key") or request.headers.get("X-API-KEY")
+        if key != API_KEY:
+            return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 def get_jwt_token(uid, password):
     url = f"https://projects-fox-x-get-jwt.vercel.app/get?uid={uid}&password={password}"
     try:
@@ -53,15 +60,6 @@ def get_jwt_token(uid, password):
     except Exception as e:
         print(f"Error getting JWT token for UID {uid}: {e}")
     return None
-
-def require_api_key(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        key = request.args.get("key") or request.headers.get("X-API-KEY")
-        if key != API_KEY:
-            return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
-        return f(*args, **kwargs)
-    return decorated_function
 
 def refresh_tokens():
     while True:
@@ -146,9 +144,6 @@ def send_friend_request_for_token(uid, token, target_id):
 @app.route('/add_likes', methods=['GET'])
 @app.route('/sv<int:sv_number>/add_likes', methods=['GET'])
 def send_friend_requests(sv_number=None):
-def get_outfit(uid: str = Query(...), region: str = Query(...), key: str = Query(None)):
-    if key != API_KEY:
-        raise HTTPException(status_code=403, detail="Invalid API key"
     target_id = request.args.get('uid')
     if not target_id:
         return jsonify({"error": "target_id is required"}), 400
@@ -177,7 +172,11 @@ def get_outfit(uid: str = Query(...), region: str = Query(...), key: str = Query
             success = send_friend_request_for_token(uid, token, target_id)
             results[uid] = success
 
-    return jsonify({"message": "Likes have been added to the player.", "results": results})
+    return jsonify({
+  "DEV": "Welcome to ProJectS FranKoo!!",
+  "TEAM": "By akaji team",
+  "message": "100 Likes Has Been Add"
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
