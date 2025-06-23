@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from functools import wraps
 import requests
 import threading
 import time
@@ -38,12 +39,12 @@ jwt_tokens_lock = threading.Lock() # قفل لحماية الوصول إلى jwt
 
 def require_api_key(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
-        key = request.args.get("key") or request.headers.get("X-API-KEY")
+    def decorated(*args, **kwargs):
+        key = request.args.get("key")  # من الرابط فقط
         if key != API_KEY:
             return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
         return f(*args, **kwargs)
-    return decorated_function
+    return decorated
     
 def get_jwt_token(uid, password):
     url = f"https://projects-fox-x-get-jwt.vercel.app/get?uid={uid}&password={password}"
