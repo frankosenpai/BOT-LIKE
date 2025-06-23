@@ -6,6 +6,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 app = Flask(__name__)
 API_KEY = "FranKo-7up" 
 
@@ -33,8 +34,17 @@ tokens_groups = {
 
 # قاموس لتخزين JWT Tokens
 jwt_tokens = {}
-jwt_tokens_lock = threading.Lock()  # قفل لحماية الوصول إلى jwt_tokens
+jwt_tokens_lock = threading.Lock() # قفل لحماية الوصول إلى jwt_tokens
 
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        key = request.args.get("key") or request.headers.get("X-API-KEY")
+        if key != API_KEY:
+            return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+    
 def get_jwt_token(uid, password):
     url = f"https://projects-fox-x-get-jwt.vercel.app/get?uid={uid}&password={password}"
     try:
@@ -50,15 +60,6 @@ def get_jwt_token(uid, password):
     except Exception as e:
         print(f"Error getting JWT token for UID {uid}: {e}")
     return None
-
-def require_api_key(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        key = request.args.get("key") or request.headers.get("X-API-KEY")
-        if key != API_KEY:
-            return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
-        return f(*args, **kwargs)
-    return decorated_function
 
 def refresh_tokens():
     while True:
@@ -143,9 +144,6 @@ def send_friend_request_for_token(uid, token, target_id):
 @app.route('/add_likes', methods=['GET'])
 @app.route('/sv<int:sv_number>/add_likes', methods=['GET'])
 def send_friend_requests(sv_number=None):
-    def get_outfit(uid: str = Query(...), region: str = Query(...), key: str = Query(None)):
-    if key != API_KEY:
-        raise HTTPException(status_code=403, detail="Invalid API key"
     target_id = request.args.get('uid')
     if not target_id:
         return jsonify({"error": "target_id is required"}), 400
@@ -173,7 +171,11 @@ def send_friend_requests(sv_number=None):
             success = send_friend_request_for_token(uid, token, target_id)
             results[uid] = success
 
-    return jsonify({"message": "Likes have been added to the player.", "results": results})
+    return jsonify({
+  "DEV": "Welcome to ProJectS FranKoo!!",
+  "TEAM": "By akaji team",
+  "message": "100 Likes Has Been Add"
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
